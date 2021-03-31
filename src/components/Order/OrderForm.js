@@ -1,8 +1,9 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Form from "../../layouts/Form";
 import {Grid, InputAdornment, makeStyles, ButtonGroup, Button as MuiButton} from '@material-ui/core';
 
 import {Input, Select, Button} from "../../controls"
+import {createAPIEndpoint, ENDPOINTS} from "../../api"
 
 
 /* ICONS */
@@ -15,6 +16,8 @@ const pMethods = [
     {id:'Cash', title: 'Cash'},
     {id:'Card', title: 'Card'},
 ]
+
+
 
 const useStyles = makeStyles(theme =>({
     adornmentText:{
@@ -42,6 +45,23 @@ export default function OrderForm(props) {
     const {values, errors, handleInputChange} = props;
     const classes = useStyles();
 
+    // const [x, setX] = useState();
+
+    const[customerList, setCustomerList] = useState([]);
+
+    useEffect(() => {
+        createAPIEndpoint(ENDPOINTS.CUSTOMER).fetchAll()
+        .then(res => {
+            let customerList = res.data.map(item => ({
+                id: item.customerId,
+                title: item.customerName
+            }));
+            customerList = [{id: 0, title: 'Select'}].concat(customerList);
+            setCustomerList(customerList);
+        })
+        .catch(err => console.log(err))
+    }, [])
+
     return (
         <Form>
             <Grid container>
@@ -62,13 +82,7 @@ export default function OrderForm(props) {
                         name = "customerId"
                         value = {values.customerId}
                         onChange = {handleInputChange}
-                        options = {[
-                            {id: 0, title: 'Select'},
-                            {id: 1, title: 'Customer 1'},
-                            {id: 2, title: 'Customer 2'},
-                            {id: 3, title: 'Customer 3'},
-                            {id: 4, title: 'Customer 4'},
-                        ]}
+                        options = {customerList}
                     />
                 </Grid>
 
