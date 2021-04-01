@@ -43,7 +43,7 @@ const useStyles = makeStyles (theme => ({
 export default function SearchFoodItems(props) {
 
 
-    const {addFoodItem} = props;
+    const {addFoodItem, orderedFoodItems} = props;
 
     const [foodItems, setFoodItems] = useState([]);
     const [searchList, setSearchList] = useState([]);
@@ -64,10 +64,11 @@ export default function SearchFoodItems(props) {
         let x = [...foodItems];
         x = x.filter(y => {
             return y.foodItemName.toLowerCase().includes(searchKey.toLowerCase())
+            && orderedFoodItems.every(item => item.foodItemId != y.foodItemId)
         });
 
         setSearchList(x);
-    }, [searchKey])
+    }, [searchKey, orderedFoodItems])
 
     return (
         <>
@@ -91,7 +92,7 @@ export default function SearchFoodItems(props) {
                             primary={item.foodItemName} 
                             secondary = {'$' + item.price}/>
                             <ListItemSecondaryAction>
-                                <IconButton onChange={e => addFoodItem(item)}>
+                                <IconButton onClick={e => addFoodItem(item)}>
                                     <PlusOneIcon />
                                     <ArrowForwardIcon />
                                 </IconButton>

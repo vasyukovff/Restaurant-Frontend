@@ -46,9 +46,15 @@ export default function Order() {
         })
     }
 
-    return (
-        <Grid container>
+    const removeFoodItem = (index, id) => {
+        let x = {...values};
+        x.orderDetails = x.orderDetails.filter((item, i) => i != index);
 
+        setValues({...x});
+    }
+
+    return (
+        <Grid container spacing={2}>
             <Grid item xs={12}>
                 <OrderForm
                     {...{values, errors, handleInputChange}}
@@ -57,13 +63,21 @@ export default function Order() {
 
             <Grid item xs={6}>
                 <SearchFoodItems 
-                    {...{addFoodItem}}
+                    {...{
+                        addFoodItem, 
+                        orderedFoodItems: values.orderDetails,
+                    }}
                 />
             </Grid>
 
             <Grid item xs={6}>
                 <OrderFoodItems 
-                    {...{orderedFoodItems: values.orderDetails}}
+                    {...{
+                        orderedFoodItems: values.orderDetails, 
+                        removeFoodItem,
+                        values,
+                        setValues
+                    }}
                 />
             </Grid>
         </Grid>
