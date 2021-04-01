@@ -43,7 +43,9 @@ const useStyles = makeStyles (theme => ({
 export default function SearchFoodItems(props) {
 
 
-    const {addFoodItem, orderedFoodItems} = props;
+    const {values, setValues} = props;
+
+    let orderedFoodItems = values.orderDetails;
 
     const [foodItems, setFoodItems] = useState([]);
     const [searchList, setSearchList] = useState([]);
@@ -70,6 +72,23 @@ export default function SearchFoodItems(props) {
         setSearchList(x);
     }, [searchKey, orderedFoodItems])
 
+
+    const addFoodItem = foodItem => {
+        let x = {
+            orderMasterId: values.orderMasterId,
+            orderDetailId: 0,
+            foodItemId: foodItem.foodItemId,
+            quantity: 1,
+            foodItemPrice: foodItem.foodItemPrice,
+            foodItemName: foodItem.foodItemName
+        }
+
+        setValues({
+            ...values,
+            orderDetails: [...values.orderDetails, x]
+        })
+    }
+
     return (
         <>
             <Paper className={classes.serachPaper}>
@@ -87,7 +106,9 @@ export default function SearchFoodItems(props) {
                 {
                     searchList.map((item, idx) =>(
                         <ListItem
-                        key={idx}>
+                        key={idx}
+                        onClick={e => addFoodItem(item)}
+                        >
                             <ListItemText
                             primary={item.foodItemName} 
                             secondary = {'$' + item.price}/>

@@ -6,9 +6,10 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 export default function OrderFoodItems(props) {
 
-    const { values, setValues } = props;
+    const {values, setValues } = props;
     let orderedFoodItems = values.orderDetails;
 
+    
     const removeFoodItem = (index, id) => {
         let x = {...values};
         x.orderDetails = x.orderDetails.filter((item, i) => i != index);
@@ -50,8 +51,14 @@ export default function OrderFoodItems(props) {
                                     <Button disabled>{item.quantity}</Button>
                                     <Button onClick = { e => updateQuantity(idx, +1)}>+</Button>
                                 </ButtonGroup>
+                                <span>
+                                    {'$' + item.quantity * item.foodItemPrice}
+                                </span>
                                 </>
                             }
+                            secondaryTypographyProps = {{
+                                component: 'div'
+                            }}
                             />
                             <ListItemSecondaryAction>
                                 <IconButton 

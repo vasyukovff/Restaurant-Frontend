@@ -30,28 +30,7 @@ export default function Order() {
         resetFormControls
     } = useForm(getFreshModelObject);
 
-    const addFoodItem = foodItem => {
-        let x = {
-            orderMasterId: values.orderMasterId,
-            orderDetailId: 0,
-            foodItemId: foodItem.foodItemId,
-            quantity: 1,
-            foodItemPrice: foodItem.foodItemPrice,
-            foodItemName: foodItem.foodItemName
-        }
 
-        setValues({
-            ...values,
-            orderDetails: [...values.orderDetails, x]
-        })
-    }
-
-    const removeFoodItem = (index, id) => {
-        let x = {...values};
-        x.orderDetails = x.orderDetails.filter((item, i) => i != index);
-
-        setValues({...x});
-    }
 
     return (
         <Grid container spacing={2}>
@@ -64,8 +43,8 @@ export default function Order() {
             <Grid item xs={6}>
                 <SearchFoodItems 
                     {...{
-                        addFoodItem, 
-                        orderedFoodItems: values.orderDetails,
+                        values,
+                        setValues
                     }}
                 />
             </Grid>
@@ -73,8 +52,6 @@ export default function Order() {
             <Grid item xs={6}>
                 <OrderFoodItems 
                     {...{
-                        orderedFoodItems: values.orderDetails, 
-                        removeFoodItem,
                         values,
                         setValues
                     }}
