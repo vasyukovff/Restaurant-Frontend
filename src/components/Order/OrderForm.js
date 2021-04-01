@@ -4,6 +4,7 @@ import {Grid, InputAdornment, makeStyles, ButtonGroup, Button as MuiButton} from
 
 import {Input, Select, Button} from "../../controls"
 import {createAPIEndpoint, ENDPOINTS} from "../../api"
+import { roundTo2DecimalPoint } from "../../utils"
 
 
 /* ICONS */
@@ -42,7 +43,7 @@ const useStyles = makeStyles(theme =>({
 
 export default function OrderForm(props) {
 
-    const {values, errors, handleInputChange} = props;
+    const {values, setValues, errors, handleInputChange} = props;
     const classes = useStyles();
 
     // const [x, setX] = useState();
@@ -61,6 +62,18 @@ export default function OrderForm(props) {
         })
         .catch(err => console.log(err))
     }, [])
+
+
+    useEffect(() => {
+        let gTotal = values.orderDetails.reduce((tempTotal, item) => {
+            return tempTotal + (item.quantity * item.foodItemPrice);
+        }, 0);
+        setValues({
+            ...values,
+            gTotal: roundTo2DecimalPoint(gTotal)
+        });
+
+    }, [JSON.stringify(values.orderDetails)])
 
     return (
         <Form>
