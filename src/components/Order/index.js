@@ -16,7 +16,7 @@ const getFreshModelObject = () => ({
     gTotal: 0,
     deletedOrderItemIds: '',
     orderDetails: []
-})
+});
 
 export default function Order() {
 
@@ -40,7 +40,9 @@ export default function Order() {
                         values,
                         setValues,
                         errors,
-                        handleInputChange
+                        setErrors,
+                        handleInputChange,
+                        resetFormControls
                     }}
                 />
             </Grid>
