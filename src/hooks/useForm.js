@@ -6,12 +6,12 @@ export function useForm(getFreshModelObject)
     const [errors, setErrors] = useState({});
 
     const handleInputChange = e => {
-        const {name, value} = e.target;
+        const {name, value} = e.target
 
         setValues({
             ...values,
             [name]: value
-        });
+        })
     }
 
     const resetFormControls = () => {
