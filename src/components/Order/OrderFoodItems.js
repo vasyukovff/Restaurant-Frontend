@@ -1,12 +1,51 @@
 import React from 'react'
-import {List, ListItem, Paper, ListItemText, ListItemSecondaryAction, IconButton, Button, ButtonGroup} from '@material-ui/core';
-
-
+import {List, ListItem, Paper, ListItemText, ListItemSecondaryAction, IconButton, Button, ButtonGroup, makeStyles} from '@material-ui/core';
+import { roundTo2DecimalPoint } from "../../utils"
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
+
+const useStyles = makeStyles(theme => ({
+    paperRoot: {
+        margin: '15px 0px',
+        '&:hover': {
+            cursor: 'pointer'
+        },
+        '&:hover $deleteButton': {
+            display: 'block'
+        }
+    },
+    buttonGroup: {
+        backgroundColor: '#E3E3E3',
+        borderRadius: 8,
+        '& .MuiButtonBase-root ': {
+            border: 'none',
+            minWidth: '25px',
+            padding: '1px'
+        },
+        '& button:nth-child(2)': {
+            fontSize: '1.2em',
+            color: '#000'
+        }
+    },
+    deleteButton: {
+        display: 'none',
+        '& .MuiButtonBase-root': {
+            color: '#E81719'
+        },
+    },
+    totalPerItem: {
+        fontWeight: 'bolder',
+        fontSize: '1.2em',
+        margin: '0px 10px'
+    }
+}))
 
 export default function OrderFoodItems(props) {
 
     const {values, setValues } = props;
+    const classes = useStyles();
+
+
     let orderedFoodItems = values.orderDetails;
 
     
@@ -33,7 +72,7 @@ export default function OrderFoodItems(props) {
         <List>
             {
                 orderedFoodItems.map((item, idx) => (
-                    <Paper key={idx}>
+                    <Paper key={idx} className = {classes.paperRoot}>
                         <ListItem>
                             <ListItemText
                             primary={item.foodItemName}
@@ -46,13 +85,15 @@ export default function OrderFoodItems(props) {
                             }} 
                             secondary = {
                                 <>
-                                <ButtonGroup size = "small">
+                                <ButtonGroup 
+                                className = {classes.buttonGroup}
+                                size = "small">
                                     <Button onClick = { e => updateQuantity(idx, -1)}>-</Button>
                                     <Button disabled>{item.quantity}</Button>
                                     <Button onClick = { e => updateQuantity(idx, +1)}>+</Button>
                                 </ButtonGroup>
-                                <span>
-                                    {'$' + item.quantity * item.foodItemPrice}
+                                <span className = {classes.totalPerItem}>
+                                    {'$' + roundTo2DecimalPoint(item.quantity * item.foodItemPrice)}
                                 </span>
                                 </>
                             }
@@ -60,7 +101,8 @@ export default function OrderFoodItems(props) {
                                 component: 'div'
                             }}
                             />
-                            <ListItemSecondaryAction>
+                            <ListItemSecondaryAction
+                            className = {classes.deleteButton}>
                                 <IconButton 
                                 disableRipple
                                 onClick={e => removeFoodItem(idx, item.orderDetailsId)}
