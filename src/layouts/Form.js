@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +17,7 @@ export default function Form(props)
 
     return (
         <form className={classes.root} noValidate autoComplete="off" {...other}>
-            {props.children}
+            {children}
         </form>
     )
 }

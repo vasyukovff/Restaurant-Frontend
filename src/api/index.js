@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const BASE_URL = 'http://localhost:27604/api/';
 
@@ -8,14 +8,14 @@ export const ENDPOINTS = {
     ORDER: 'Order'
 }
 
-export const createAPIEndpoint = endpoint =>{
-    let url = BASE_URL + endpoint + '/';
+export const createAPIEndpoint = endpoint => {
 
-    return{
+    let url = BASE_URL + endpoint + '/';
+    return {
         fetchAll: () => axios.get(url),
         fetchById: id => axios.get(url + id),
         create: newRecord => axios.post(url, newRecord),
-        update: (id, updateRecord) => axios.put(url + id, updateRecord),
+        update: (id, updatedRecord) => axios.put(url + id, updatedRecord),
         delete: id => axios.delete(url + id)
     }
 }
