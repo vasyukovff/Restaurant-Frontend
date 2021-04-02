@@ -7,7 +7,6 @@ export function useForm(getFreshModelObject)
 
     const handleInputChange = e => {
         const {name, value} = e.target
-
         setValues({
             ...values,
             [name]: value
@@ -15,7 +14,7 @@ export function useForm(getFreshModelObject)
     }
 
     const resetFormControls = () => {
-        setValues(getFreshModelObject())
+        setValues(getFreshModelObject());
         setErrors({})
     }
 

@@ -16,7 +16,7 @@ const getFreshModelObject = () => ({
     gTotal: 0,
     deletedOrderItemIds: '',
     orderDetails: []
-});
+})
 
 export default function Order() {
 

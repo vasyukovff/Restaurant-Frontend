@@ -52,6 +52,7 @@ export default function OrderForm(props) {
 
     const[customerList, setCustomerList] = useState([]);
     const[orderListVisibility, setOrderListVisibility] = useState(false);
+    const[orderId, setOrderId] = useState(0);
 
     useEffect(() => {
         createAPIEndpoint(ENDPOINTS.CUSTOMER).fetchAll()
@@ -79,27 +80,54 @@ export default function OrderForm(props) {
     }, [JSON.stringify(values.orderDetails)]);
 
 
+    useEffect(() => {
+        if(orderId == 0) resetFormControls()
+        else{
+            createAPIEndpoint(ENDPOINTS.ORDER).fetchById(orderId)
+            .then(res => {
+                setValues(res.data);
+                setErrors({});
+            })
+            .catch(err => console.log(err))
+        }
+    }, [orderId])
+
+
     const validateForm = () => {
         let temp = {};
         temp.customerId = values.customerId != 0?"":"This field is required.";
         temp.pMethod = values.pMethod != "none"?"":"This field is required.";
-        temp.orderDetails = values.orderDetails.length != 0?"":"This field is required."
+        temp.orderDetails = values.orderDetails.length != 0?"":"This field is required.";
 
-        setErrors({...temp});
+        setErrors({ ...temp });
 
         return Object.values(temp).every(x => x === "");
+    }
+
+    const resetForm = () => {
+        resetFormControls();
+        setOrderId(0);
     }
 
     const submitOrder = e => {
         e.preventDefault();
 
         if(validateForm()){
-            createAPIEndpoint(ENDPOINTS.ORDER).create(values)
-            .then(res =>
-                {
-                    resetFormControls();
+            if(values.orderMasterId == 0){
+                createAPIEndpoint(ENDPOINTS.ORDER).create(values)
+                .then(res =>
+                    {
+                        resetFormControls();
+                    })
+                    .catch(err => console.log(err));
+            }
+            else {
+                createAPIEndpoint(ENDPOINTS.ORDER).update(values.orderMasterId, values)
+                .then(res => {
+                    setOrderId(0);
                 })
                 .catch(err => console.log(err));
+            }
         }
     }
 
@@ -177,7 +205,9 @@ export default function OrderForm(props) {
             title="List of Orders"
             openPopup={orderListVisibility}
             setOpenPopup={setOrderListVisibility}>
-                <OrderList />
+                <OrderList 
+                {...{setOrderId, setOrderListVisibility, resetFormControls}}
+                />
             </Popup>
         </>
     )
